@@ -136,9 +136,9 @@ for y in {0, 1, 2, 6, 7, 8}:
             castle_routes[x][y].append((+1, 0))
         if 3 < x <= 5:
             castle_routes[x][y].append((-1, 0))
-        if 0 <= y < 2 or 6 <= y < 8:
+        if (0 <= y < 2) or (6 <= y < 8):
             castle_routes[x][y].append((0, +1))
-        if 0 < y <= 2 or 6 < y <= 8:
+        if (0 < y <= 2) or (6 < y <= 8):
             castle_routes[x][y].append((0, -1))
 
         if (x == 4 and y == 1) or (x == 4 and y == 7):
@@ -149,7 +149,7 @@ for y in {0, 1, 2, 6, 7, 8}:
                     (+1, -1),
             ):
                 castle_routes[x][y].append((+dx, +dy))
-                castle_routes[x + dx][y + dy].append((-dx, -dx))
+                castle_routes[x + dx][y + dy].append((-dx, -dy))
 
 castle_routes_cross_only = {
     a_k: {b_k: [(dx, dy) for dx, dy in b_v if dx != 0 and dy != 0] for b_k, b_v in a_v.items()} for a_k, a_v in

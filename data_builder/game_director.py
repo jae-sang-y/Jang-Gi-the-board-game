@@ -22,7 +22,7 @@ class Director:
 
         tick = datetime.datetime.now()
         delta = tick - self.last_tick
-        if delta.total_seconds() >= 1:
+        if delta.total_seconds() >= 0.1:
             self.tick()
 
     @staticmethod
@@ -173,26 +173,26 @@ class Director:
             )
         ]
 
+    def get_actor(self, team_code: int) -> Tuple[int, int, int]:
+        result = None
+        n = 1
+        for x, y, act_code in self.board:
+            if act_code == ActorCode.Null:
+                continue
+            if team_code != TeamCode.from_act_code(act_code):
+                continue
+            if random.uniform(0, 1) <= 1 / n:
+                result = x, y, act_code
+                n += 1
+
+        assert result is not None
+        return result
+
     def tick(self):
         self.last_tick = datetime.datetime.now()
 
-        def get_actor() -> Tuple[int, int, int]:
-            result = None
-            n = 1
-            for x, y, act_code in self.board:
-                if act_code == ActorCode.Null:
-                    continue
-                if random.uniform(0, 1) <= 1 / n:
-                    result = x, y, act_code
-                    n += 1
-
-            assert result is not None
-            return result
-
         while True:
-            actor = get_actor()
-            if TeamCode.from_act_code(actor[2]) != self.turn_own_team:
-                continue
+            actor = self.get_actor(self.turn_own_team)
 
             pos_list = self.get_movable_positions(*actor)
             if len(pos_list) > 0:
