@@ -17,7 +17,8 @@ while main_loop:
             main_loop = False
         elif e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
             main_loop = False
-
+        else:
+            director.input(e)
     director.step()
 
     pygame.display.flip()

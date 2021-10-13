@@ -1,12 +1,14 @@
 import datetime
 import random
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 
+import pygame
 from pygame import Surface
+from pygame.event import Event
 
 from game_data import Board, ActorCode, MoveCode, TeamCode, FourDirectionDelta, castle_routes, is_inner_castle, \
-    castle_routes_cross_only
-from game_viewer import Viewer
+    castle_routes_cross_only, block_width
+from game_viewer import Viewer, actor_width
 
 
 class Director:
@@ -16,14 +18,81 @@ class Director:
         self.last_tick = datetime.datetime.now()
         self.turn_own_team = TeamCode.Red
 
+        self.user_team = TeamCode.Green
+        self.user_actor: Optional[Tuple[int, int, int]] = None
+        self.user_actor_positions: List[Tuple[int, int]] = []
+
     def step(self):
         self.viewer.board = self.board
         self.viewer.step()
+        if self.user_actor:
+            x, y, act_code = self.user_actor
+            self.viewer.draw_decisions(x, y, act_code, self.user_actor_positions)
 
-        tick = datetime.datetime.now()
-        delta = tick - self.last_tick
-        if delta.total_seconds() >= 0.1:
-            self.tick()
+        if self.viewer.events:
+            self.last_tick = datetime.datetime.now()
+        elif self.turn_own_team != self.user_team:
+            tick = datetime.datetime.now()
+            delta = tick - self.last_tick
+            if delta.total_seconds() >= 0.1:
+                self.tick()
+
+    def input(self, e: Event):
+        if e.type == pygame.KEYDOWN:
+            if e.key == pygame.K_a:
+                self.viewer.add_earth_quake(force=0.5)
+            if e.key == pygame.K_s:
+                self.viewer.add_earth_quake(force=1)
+            if e.key == pygame.K_d:
+                self.viewer.add_earth_quake(force=2)
+        if self.turn_own_team != self.user_team:
+            return
+        if e.type == pygame.MOUSEBUTTONDOWN:
+            click_nothing = True
+            for x, y, act_code in self.board:
+                rect = pygame.Rect(
+                    (x + 0.5) * block_width - (actor_width - block_width) / 2,
+                    (y + 0.5) * block_width - (actor_width - block_width) / 2,
+                    block_width,
+                    block_width
+                )
+                cursor_x, cursor_y = e.pos
+                if rect.collidepoint(cursor_x, cursor_y):
+                    if act_code != ActorCode.Null:
+                        click_nothing = False
+                    if act_code == ActorCode.Null or TeamCode.from_act_code(act_code) != self.user_team:
+                        if self.user_actor is not None:
+                            for new_x, new_y in self.user_actor_positions:
+                                if new_x == x and new_y == y:
+                                    old_x, old_y, act_code = self.user_actor
+                                    self.board[old_y][old_x] = ActorCode.Null
+                                    move_duration = self.viewer.add_event(
+                                        Viewer.Event.Type.Move,
+                                        code1=act_code,
+                                        x1=old_x, y1=old_y,
+                                        x2=new_x, y2=new_y
+                                    ).duration
+                                    if self.board[new_y][new_x] != ActorCode.Null:
+                                        self.viewer.add_event(
+                                            Viewer.Event.Type.Delete,
+                                            code1=self.board[new_y][new_x],
+                                            code2=move_duration,
+                                            x1=new_x, y1=new_y
+                                        )
+
+                                    self.board[new_y][new_x] = act_code
+                                    self.release_turn()
+                                    self.user_actor = None
+                                    self.user_actor_positions = []
+                                    break
+
+                    else:
+                        self.user_actor = x, y, act_code
+                        self.user_actor_positions = self.get_movable_positions(x, y, act_code)
+                    break
+            if click_nothing:
+                self.user_actor = None
+                self.user_actor_positions = []
 
     @staticmethod
     def is_possible_position(x: int, y: int) -> bool:
@@ -59,15 +128,15 @@ class Director:
                 ry = y + dy
                 first_pos = rx, ry
                 if self.is_possible_position(*first_pos) and self.is_empty_position(*first_pos):
-                    temp_pos = rx + dx, ry + dy
+                    pass
                 else:
                     continue
 
                 for z in (-1, 1):
                     if dx != 0:
-                        pos = (temp_pos[0], temp_pos[1] + z)
+                        pos = (first_pos[0] + dx, first_pos[1] + z)
                     else:
-                        pos = (temp_pos[0] + z, temp_pos[1])
+                        pos = (first_pos[0] + z, first_pos[1] + dy)
                     result.append(pos)
         elif mc == MoveCode.Elephant:
             for dx, dy in FourDirectionDelta:
@@ -96,7 +165,7 @@ class Director:
                         third_pos = (second_pos[0] + z, second_pos[1] + dy)
                     result.append(third_pos)
         elif mc == MoveCode.Cart:
-            directions = FourDirectionDelta
+            directions = list(FourDirectionDelta)
             if is_inner_castle(x, y):
                 directions += castle_routes_cross_only[x][y]
                 print('castle', castle_routes_cross_only[x][y])
@@ -120,7 +189,7 @@ class Director:
                             result.append(first_pos)
                         break
         elif mc == MoveCode.Artillery:
-            directions = FourDirectionDelta
+            directions = list(FourDirectionDelta)
             if is_inner_castle(x, y):
                 directions += castle_routes_cross_only[x][y]
                 print('castle', castle_routes_cross_only[x][y])
@@ -159,6 +228,7 @@ class Director:
                             elif self.is_enemy_position(tc, *second_pos):
                                 result.append(second_pos)
                             break
+                    break
         elif mc == MoveCode.CastleMan:
             for dx, dy in castle_routes[x][y]:
                 fx = x + dx
@@ -197,13 +267,30 @@ class Director:
             pos_list = self.get_movable_positions(*actor)
             if len(pos_list) > 0:
                 old_x, old_y, act_code = actor
+                new_x, new_y = pos_list[random.randint(0, len(pos_list) - 1)]
 
                 self.board[old_y][old_x] = ActorCode.Null
-                new_x, new_y = pos_list[random.randint(0, len(pos_list) - 1)]
+                move_duration = self.viewer.add_event(
+                    Viewer.Event.Type.Move,
+                    code1=act_code,
+                    x1=old_x, y1=old_y,
+                    x2=new_x, y2=new_y
+                ).duration
+                if self.board[new_y][new_x] != ActorCode.Null:
+                    self.viewer.add_event(
+                        Viewer.Event.Type.Delete,
+                        code1=self.board[new_y][new_x],
+                        code2=move_duration,
+                        x1=new_x, y1=new_y
+                    )
+
                 self.board[new_y][new_x] = act_code
                 print(actor)
                 print([new_x, new_y])
                 break
+        self.release_turn()
+
+    def release_turn(self):
         if self.turn_own_team == TeamCode.Red:
             self.turn_own_team = TeamCode.Green
         else:
