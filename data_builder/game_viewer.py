@@ -2,14 +2,18 @@ import datetime
 import enum
 import math
 import random
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Final
 
 import pygame.surface
 from pygame.surface import Surface
 
-from game_data import block_width, screen_width, Board, MoveCode
+from game_data import block_width, screen_width, Board, MoveCode, ActorCode
 
 actor_width = int(block_width * 1.5)
+
+
+def sign(num: float) -> float:
+    return +1 if num >= 0 else -1
 
 
 class Sprites:
@@ -61,26 +65,31 @@ class Viewer:
 
         def __init__(self, event_type: Type, *,
                      x1: int, y1: int,
-                     code1: int = None, code2: float = None,
+                     duration: float = None,
+                     code1: int = None, code2: int = None,
                      x2: int = None, y2: int = None):
-            self.event_type = event_type
-            self.born_time = datetime.datetime.now()
-            self.code1 = code1
-            self.code2 = code2
-            self.x1 = x1
-            self.y1 = y1
-            self.x2 = x2
-            self.y2 = y2
-            self.duration = 0
+            self.event_type: Final = event_type
+            self.born_time: Final = datetime.datetime.now()
+            self.code1: Final = code1
+            self.code2: Final = code2
+            self.x1: Final = x1
+            self.y1: Final = y1
+            self.x2: Final = x2
+            self.y2: Final = y2
             self.let_me_die = False
+
             if self.event_type == self.Type.Move:
                 length = math.sqrt(
                     (self.x1 - self.x2) ** 2 +
                     (self.y1 - self.y2) ** 2
                 )
-                self.duration = 0.5 + (length - 1) * 0.05
+                duration = 0.5 + (length - 1) * 0.05
             elif self.event_type == self.Type.Delete:
-                self.duration = self.code2
+                pass
+            else:
+                raise ValueError(self.event_type)
+
+            self.duration: Final = duration
 
         @property
         def progress(self) -> float:
@@ -88,12 +97,15 @@ class Viewer:
 
     sprites = Sprites()
 
-    def __init__(self, surf: Surface):
+    def __init__(self, surf: Surface, board: Board):
         self.surf: Surface = surf
-        self.board: Optional[Board] = None
+        self.board: Board = board
         self.events: List[Viewer.Event] = []
-        self.earth_quake = [0, 0]
+
+        self.time = datetime.datetime.now()
+        self.earth_quake_potential = [0, 0]
         self.earth_quake_velocity = [0, 0]
+        self.earth_quake_time = 0
         self.earth_quake_direction = [
             [random.uniform(0, math.pi * 2) for x in range(9)] for y in range(9)
         ]
@@ -101,7 +113,9 @@ class Viewer:
     def draw_borders(self):
         border_color = (200, 140, 60)
 
-        ex, ey = self.earth_quake
+        ex, ey = self.earth_quake_potential
+        ex *= 1e-1
+        ey *= 1e-1
 
         for x1, y1, x2, y2 in (
                 (4, 7, 6, 9),
@@ -109,13 +123,17 @@ class Viewer:
                 (4, 1, 6, 3),
                 (6, 1, 4, 3),
         ):
-            pygame.draw.line(
-                self.surf,
-                color=border_color,
-                start_pos=(block_width * x1 + ex, block_width * y1 + ey),
-                end_pos=(block_width * x2 + ex, block_width * y2 + ey),
-                width=5
-            )
+            try:
+                pygame.draw.line(
+                    self.surf,
+                    color=border_color,
+                    start_pos=(block_width * x1 + ex, block_width * y1 + ey),
+                    end_pos=(block_width * x2 + ex, block_width * y2 + ey),
+                    width=5
+                )
+            except Exception as e:
+                print(ex, ey)
+                raise e
 
         for x in range(9):
             x += 1
@@ -149,8 +167,11 @@ class Viewer:
             if is_animating:
                 continue
 
-            ex = math.cos(self.earth_quake_direction[x][y]) * (self.earth_quake[0] + self.earth_quake[1]) * 0.5
-            ey = math.sin(self.earth_quake_direction[x][y]) * (self.earth_quake[0] + self.earth_quake[1]) * 0.5
+            # ex = math.cos(self.earth_quake_direction[x][y]) * (self.earth_quake_potential[0] + self.earth_quake_potential[1]) * 0.5
+            # ey = math.sin(self.earth_quake_direction[x][y]) * (                        self.earth_quake_potential[0] + self.earth_quake_potential[1]) * 0.5
+            ex = 1e-2 * math.cos(self.earth_quake_direction[x][y]) * self.earth_quake_velocity[0]
+            ey = 1e-2 * math.sin(self.earth_quake_direction[x][y]) * self.earth_quake_velocity[1]
+
             self.surf.blit(
                 self.sprites.from_act_code(act_code),
                 dest=(
@@ -203,78 +224,116 @@ class Viewer:
                 )
             elif event.event_type == self.Event.Type.Delete:
 
-                surf = self.sprites.normal[event.code1]
+                new_actor_surf = self.sprites.normal[event.code1]
                 p = event.progress
                 if p < 1 - 0.5 / event.duration:
-                    event.code2 = 1.0
-                    continue
+                    self.surf.blit(
+                        new_actor_surf,
+                        dest=(
+                            (event.x1 + 0.5) * block_width - (actor_width - block_width) / 2,
+                            (event.y1 + 0.5) * block_width - (actor_width - block_width) / 2,
+                            block_width,
+                            block_width
+                        )
+                    )
                 else:
+                    self.surf.blit(
+                        self.sprites.normal[event.code2],
+                        dest=(
+                            (event.x1 + 0.5) * block_width - (actor_width - block_width) / 2,
+                            (event.y1 + 0.5) * block_width - (actor_width - block_width) / 2,
+                            block_width,
+                            block_width
+                        )
+                    )
                     t = p * event.duration
                     p = (t - (event.duration - 0.5)) / 0.5
-                    print('p %4.2f %4.2f' % (p, p ** 16))
                     p = 0.5 * (
                             + 5 * p
                             - 9 * (p ** 2)
                             + 6 * (p ** 3)
                     )
-                if event.code2 > 0:
-                    event.code2 = - 1
-                    if MoveCode.from_act_code(event.code1) in (MoveCode.Cart, MoveCode.Artillery, MoveCode.CastleMan):
-                        self.add_earth_quake(2)
-                    elif MoveCode.from_act_code(event.code1) == MoveCode.Horse:
-                        self.add_earth_quake(1.6)
-                    else:
-                        self.add_earth_quake(1.2)
+                    if event.code2 > 0:
+                        if MoveCode.from_act_code(event.code1) in (
+                                MoveCode.Cart, MoveCode.Artillery, MoveCode.CastleMan) and \
+                                event.code1 not in (ActorCode.NorthBishop, ActorCode.SouthBishop):
+                            self.add_earth_quake(force=2.25, time=1)
+                        elif MoveCode.from_act_code(event.code1) == MoveCode.Horse or \
+                                event.code1 not in (ActorCode.NorthBishop, ActorCode.SouthBishop):
+                            self.add_earth_quake(force=1.85, time=1)
+                        else:
+                            self.add_earth_quake(force=0.5, time=0)
 
-                surf.set_alpha(int(0xff * (1 - p)))
-                for z in range(1, 21):
-                    r = z / 20 * math.pi * 2 + event.born_time.microsecond
-                    dx = math.cos(r) * p * 400
-                    dy = math.sin(r) * p * 400
-                    self.surf.blit(
-                        surf,
-                        dest=(
-                            (event.x1 + 0.5) * block_width - (actor_width - block_width) / 2 + dx,
-                            (event.y1 + 0.5) * block_width - (actor_width - block_width) / 2 + dy,
-                            block_width,
-                            block_width
+                    new_actor_surf.set_alpha(int(0xff * (1 - p)))
+                    for z in range(1, 21):
+                        r = z / 20 * math.pi * 2 + event.born_time.microsecond
+                        dx = math.cos(r) * p * 400
+                        dy = math.sin(r) * p * 400
+                        self.surf.blit(
+                            new_actor_surf,
+                            dest=(
+                                (event.x1 + 0.5) * block_width - (actor_width - block_width) / 2 + dx,
+                                (event.y1 + 0.5) * block_width - (actor_width - block_width) / 2 + dy,
+                                block_width,
+                                block_width
+                            )
                         )
-                    )
-                surf.set_alpha(0xff)
+                    new_actor_surf.set_alpha(0xff)
             else:
                 raise ValueError(event.event_type)
         self.events = [event for event in self.events if not event.let_me_die]
 
     def step(self):
+        now = datetime.datetime.now()
+        dt = (now - self.time).total_seconds()
+        self.time = now
+
         pygame.draw.rect(self.surf, color=(40, 40, 40), rect=(0, 0, screen_width, screen_width))
         self.draw_borders()
         self.draw_actors()
         self.draw_event_effects()
 
-        x, y = self.earth_quake
-        mult = 0.3
-        x = -x * mult
-        y = -y * mult
-        l = x ** 2 + y ** 2
-        for k in range(2):
-            l += self.earth_quake_velocity[k] ** 2
-        if l < 0.06:
-            self.earth_quake_velocity = [0, 0]
-            self.earth_quake = [0, 0]
+        x, y = self.earth_quake_potential
+        length = (x ** 2 + y ** 2) ** 0.5
+        x, y = self.earth_quake_velocity
+
+        velocity = (x ** 2 + y ** 2) ** 0.5
+        friction = (velocity ** 2) * 0.5
+
+        if velocity <= friction or velocity <= 5:
+            if length < 1:
+                self.earth_quake_potential = [0, 0]
+                self.earth_quake_velocity = [0, 0]
+        else:
+            norm_vec = x / velocity, y / velocity
+            for k in range(2):
+                self.earth_quake_velocity[k] -= dt * norm_vec[k] * friction
+
+        if length < 0.1:
+            self.earth_quake_potential = [0, 0]
         else:
 
-            vec = x, y
-
             for k in range(2):
-                self.earth_quake[k] += self.earth_quake_velocity[k]
-            for k in range(2):
-                self.earth_quake_velocity[k] += vec[k]
-                self.earth_quake_velocity[k] *= 0.5
+                self.earth_quake_potential[k] -= \
+                    self.earth_quake_potential[k] * dt * \
+                    (21 - max(1 - self.earth_quake_time, 0) * 20)
+            if self.earth_quake_time > 0:
+                for k in range(2):
+                    self.earth_quake_potential[k] += self.earth_quake_velocity[k] * dt
+                self.earth_quake_time -= dt
+                vec = self.earth_quake_potential
+                for k in range(2):
+                    self.earth_quake_velocity[k] -= 1e4 * self.earth_quake_time * vec[k] / length * dt
 
-    def add_earth_quake(self, force: float):
-        for k in range(2):
-            self.earth_quake_velocity[k] += random.uniform(-1, 1) * (10 ** force)
+    def add_earth_quake(self, *, force: float, time: float):
+        r = random.uniform(-1, 1) * math.pi
 
+        self.earth_quake_potential[0] += math.cos(r) * (10 ** force)
+        self.earth_quake_potential[1] += math.sin(r) * (10 ** force)
+        r = random.uniform(-1, 1) * math.pi
+        self.earth_quake_velocity[0] += math.cos(r) * (10 ** force)
+        self.earth_quake_velocity[1] += math.sin(r) * (10 ** force)
+        self.earth_quake_time = time
         self.earth_quake_direction = [
             [random.uniform(0, math.pi * 2) for x in range(9)] for y in range(9)
         ]
