@@ -1,34 +1,10 @@
 from threading import Thread
-from typing import Optional, List, Tuple, final, NoReturn
+from typing import Optional, List, final, NoReturn
 
 from pygame.event import Event
 
-from game_data import Board, ActorCode, TeamCode
+from game_data import ActorCode, TeamCode, Decision, Board, Actor
 from game_viewer import Viewer
-
-Pos = Tuple[int, int]
-Actor = Tuple[int, int, int]
-
-
-class Decision:
-    def __init__(self, *, old_x: int, old_y: int, act_code: int, new_x: int, new_y: int):
-        self.old_x = old_x
-        self.old_y = old_y
-        self.act_code = act_code
-        self.new_x = new_x
-        self.new_y = new_y
-
-    def __repr__(self) -> str:
-        return str(self)
-
-    def __str__(self):
-        return '<Decision={:<14s} ({:> 2d}, {:> 2d}) -> ({:> 2d}, {:> 2d})'.format(
-            ActorCode.get_name(self.act_code),
-            self.old_x,
-            self.old_y,
-            self.new_x,
-            self.new_y,
-        )
 
 
 class DecisionMaker:
@@ -42,12 +18,12 @@ class DecisionMaker:
     @final
     def get_actors(self) -> List[Actor]:
         result = []
-        for x, y, act_code in self.board:
-            if act_code == ActorCode.Null:
+        for x, y, actor_code in self.board:
+            if actor_code == ActorCode.Null:
                 continue
-            if TeamCode.from_act_code(act_code) != self.board.turn_own_team:
+            if TeamCode.from_actor_code(actor_code) != self.board.turn_own_team:
                 continue
-            result.append((x, y, act_code))
+            result.append((x, y, actor_code))
         return result
 
     @final

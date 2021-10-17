@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "python.h": "c",
+        "pyctype.h": "c",
+        "vector": "cpp"
+    }
+}

@@ -7,7 +7,7 @@ from typing import List, Optional, Tuple, Final
 import pygame.surface
 from pygame.surface import Surface
 
-from game_data import block_width, screen_width, Board, MoveCode, ActorCode
+from game_data import block_width, screen_width, Board, MoveCode, ActorCode, screen_width
 
 actor_width = int(block_width * 1.5)
 
@@ -53,8 +53,8 @@ class Sprites:
             self.glowed.append(glowed)
             self.shadowed.append(shadowed)
 
-    def from_act_code(self, act_code: int) -> Surface:
-        return self.normal[act_code]
+    def from_actor_code(self, actor_code: int) -> Surface:
+        return self.normal[actor_code]
 
 
 class Viewer:
@@ -107,7 +107,7 @@ class Viewer:
         self.earth_quake_velocity = [0, 0]
         self.earth_quake_time = 0
         self.earth_quake_direction = [
-            [random.uniform(0, math.pi * 2) for x in range(9)] for y in range(9)
+            [random.uniform(0, math.pi * 2) for x in range(9)] for y in range(10)
         ]
 
     def draw_borders(self):
@@ -118,8 +118,8 @@ class Viewer:
         ey *= 1e-1
 
         for x1, y1, x2, y2 in (
-                (4, 7, 6, 9),
-                (6, 7, 4, 9),
+                (4, 8, 6, 10),
+                (6, 8, 4, 10),
                 (4, 1, 6, 3),
                 (6, 1, 4, 3),
         ):
@@ -141,20 +141,22 @@ class Viewer:
                 self.surf,
                 color=border_color,
                 start_pos=(block_width * x + ex, block_width * 1 + ey),
-                end_pos=(block_width * x + ex, block_width * 9 + ey),
+                end_pos=(block_width * x + ex, block_width * 10 + ey),
                 width=3
             )
+        for y in range(10):
+            y += 1
             pygame.draw.line(
                 self.surf,
                 color=border_color,
-                start_pos=(block_width * 1 + ex, block_width * x + ey),
-                end_pos=(block_width * 9 + ex, block_width * x + ey),
+                start_pos=(block_width * 1 + ex, block_width * y + ey),
+                end_pos=(block_width * 9 + ex, block_width * y + ey),
                 width=3
             )
 
     def draw_actors(self):
-        for x, y, act_code in self.board:
-            if act_code == 0:
+        for x, y, actor_code in self.board:
+            if actor_code == 0:
                 continue
             is_animating = False
             for event in self.events:
@@ -169,11 +171,11 @@ class Viewer:
 
             # ex = math.cos(self.earth_quake_direction[x][y]) * (self.earth_quake_potential[0] + self.earth_quake_potential[1]) * 0.5
             # ey = math.sin(self.earth_quake_direction[x][y]) * (                        self.earth_quake_potential[0] + self.earth_quake_potential[1]) * 0.5
-            ex = 1e-2 * math.cos(self.earth_quake_direction[x][y]) * self.earth_quake_velocity[0]
-            ey = 1e-2 * math.sin(self.earth_quake_direction[x][y]) * self.earth_quake_velocity[1]
+            ex = 1e-2 * math.cos(self.earth_quake_direction[y][x]) * self.earth_quake_velocity[0]
+            ey = 1e-2 * math.sin(self.earth_quake_direction[y][x]) * self.earth_quake_velocity[1]
 
             self.surf.blit(
-                self.sprites.from_act_code(act_code),
+                self.sprites.from_actor_code(actor_code),
                 dest=(
                     (x + 0.5) * block_width - (actor_width - block_width) / 2 + ex,
                     (y + 0.5) * block_width - (actor_width - block_width) / 2 + ey,
@@ -182,10 +184,10 @@ class Viewer:
                 )
             )
 
-    def draw_decisions(self, old_x: int, old_y: int, act_code: int, positions: List[Tuple[int, int]]):
+    def draw_decisions(self, old_x: int, old_y: int, actor_code: int, positions: List[Tuple[int, int]]):
         for new_x, new_y in positions:
             self.surf.blit(
-                self.sprites.shadowed[act_code],
+                self.sprites.shadowed[actor_code],
                 dest=(
                     (new_x + 0.5) * block_width - (actor_width - block_width) / 2,
                     (new_y + 0.5) * block_width - (actor_width - block_width) / 2,
@@ -195,7 +197,7 @@ class Viewer:
             )
 
         self.surf.blit(
-            self.sprites.glowed[act_code],
+            self.sprites.glowed[actor_code],
             dest=(
                 (old_x + 0.5) * block_width - (actor_width - block_width) / 2,
                 (old_y + 0.5) * block_width - (actor_width - block_width) / 2,
@@ -254,15 +256,16 @@ class Viewer:
                             + 6 * (p ** 3)
                     )
                     if event.code2 > 0:
-                        if MoveCode.from_act_code(event.code1) in (
-                                MoveCode.Cart, MoveCode.Artillery, MoveCode.CastleMan) and \
-                                event.code1 not in (ActorCode.NorthBishop, ActorCode.SouthBishop):
-                            self.add_earth_quake(force=2.25, time=1)
-                        elif MoveCode.from_act_code(event.code1) == MoveCode.Horse or \
-                                event.code1 not in (ActorCode.NorthBishop, ActorCode.SouthBishop):
-                            self.add_earth_quake(force=1.85, time=1)
-                        else:
-                            self.add_earth_quake(force=0.5, time=0)
+                        if self.earth_quake_time <= 0:
+                            if MoveCode.from_actor_code(event.code1) in (
+                                    MoveCode.Cart, MoveCode.Artillery, MoveCode.CastleMan) and \
+                                    event.code1 not in (ActorCode.NorthBishop, ActorCode.SouthBishop):
+                                self.add_earth_quake(force=2.25, time=1)
+                            elif MoveCode.from_actor_code(event.code1) == MoveCode.Horse or \
+                                    event.code1 not in (ActorCode.NorthBishop, ActorCode.SouthBishop):
+                                self.add_earth_quake(force=1.85, time=1)
+                            else:
+                                self.add_earth_quake(force=0.5, time=1)
 
                     new_actor_surf.set_alpha(int(0xff * (1 - p)))
                     for z in range(1, 21):
@@ -311,6 +314,7 @@ class Viewer:
 
         if length < 0.1:
             self.earth_quake_potential = [0, 0]
+            self.earth_quake_time = 0
         else:
 
             for k in range(2):
@@ -324,6 +328,8 @@ class Viewer:
                 vec = self.earth_quake_potential
                 for k in range(2):
                     self.earth_quake_velocity[k] -= 1e4 * self.earth_quake_time * vec[k] / length * dt
+            else:
+                self.earth_quake_time = 0
 
     def add_earth_quake(self, *, force: float, time: float):
         r = random.uniform(-1, 1) * math.pi
@@ -335,7 +341,7 @@ class Viewer:
         self.earth_quake_velocity[1] += math.sin(r) * (10 ** force)
         self.earth_quake_time = time
         self.earth_quake_direction = [
-            [random.uniform(0, math.pi * 2) for x in range(9)] for y in range(9)
+            [random.uniform(0, math.pi * 2) for x in range(9)] for y in range(10)
         ]
 
     def add_event(self, *args, **kwargs) -> Event:

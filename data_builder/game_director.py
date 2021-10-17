@@ -3,7 +3,7 @@ from pygame import Surface
 from pygame.event import Event
 
 from decision_maker import DecisionMaker
-from decision_maker.random import RandomDecisionMaker
+from decision_maker.score_base import ScoreBasedDecisionMaker
 from game_data import Board, ActorCode, TeamCode
 from game_viewer import Viewer
 
@@ -12,8 +12,8 @@ class Director:
     def __init__(self, surf: Surface):
         self.board = Board()
         self.viewer = Viewer(surf, board=self.board)
-        self.north_decision_maker: DecisionMaker = RandomDecisionMaker(delay=0)
-        self.south_decision_maker: DecisionMaker = RandomDecisionMaker(delay=0)
+        self.north_decision_maker: DecisionMaker = ScoreBasedDecisionMaker()
+        self.south_decision_maker: DecisionMaker = ScoreBasedDecisionMaker()
         self.turn_count = 1
 
     @property
@@ -37,7 +37,7 @@ class Director:
 
                 move_duration = self.viewer.add_event(
                     Viewer.Event.Type.Move,
-                    code1=decision.act_code,
+                    code1=decision.actor_code,
                     x1=decision.old_x,
                     y1=decision.old_y,
                     x2=decision.new_x,
@@ -54,14 +54,8 @@ class Director:
                         x2=decision.old_x,
                         y2=decision.old_y,
                     )
-
-                self.board[decision.old_y][decision.old_x] = ActorCode.Null
-                self.board[decision.new_y][decision.new_x] = decision.act_code
+                self.board = self.board.sub_board(decision)
                 self.viewer.board = self.board
-                if self.board.turn_own_team == TeamCode.North:
-                    self.board.turn_own_team = TeamCode.South
-                else:
-                    self.board.turn_own_team = TeamCode.North
             else:
                 self.current_decision_maker.step(viewer=self.viewer)
 
