@@ -1,9 +1,10 @@
 from threading import Thread
 from typing import Optional, List, final, NoReturn
 
+import board_in_c as Board
 from pygame.event import Event
 
-from game_data import ActorCode, TeamCode, Decision, Board, Actor
+from game_data import ActorCode, TeamCode, Decision, Actor
 from game_viewer import Viewer
 
 

@@ -1,10 +1,11 @@
 import pygame
+from board_in_c import Board
 from pygame import Surface
 from pygame.event import Event
 
 from decision_maker import DecisionMaker
 from decision_maker.score_base import ScoreBasedDecisionMaker
-from game_data import Board, ActorCode, TeamCode
+from game_data import ActorCode, TeamCode
 from game_viewer import Viewer
 
 
@@ -26,7 +27,7 @@ class Director:
     def step(self):
         self.viewer.step()
 
-        if self.board.is_ended() is False:
+        if self.board.is_ended_game is False:
             if self.viewer.events:
                 pass
             elif self.current_decision_maker.is_not_busy and not self.current_decision_maker.is_decision_ready:
@@ -43,14 +44,14 @@ class Director:
                     x2=decision.new_x,
                     y2=decision.new_y
                 ).duration
-                if self.board[decision.new_y][decision.new_x] != ActorCode.Null:
+                if self.board[decision.new_x, decision.new_y] != ActorCode.Null:
                     self.viewer.add_event(
                         Viewer.Event.Type.Delete,
                         duration=move_duration + 0.5,
-                        code1=self.board[decision.new_y][decision.new_x],
+                        code1=self.board[decision.new_x, decision.new_y],
                         x1=decision.new_x,
                         y1=decision.new_y,
-                        code2=self.board[decision.old_y][decision.old_x],
+                        code2=self.board[decision.old_x, decision.old_y],
                         x2=decision.old_x,
                         y2=decision.old_y,
                     )

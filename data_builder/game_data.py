@@ -1,3 +1,4 @@
+import enum
 from abc import ABC
 from typing import Tuple, List, Dict, Iterable
 
@@ -41,9 +42,9 @@ class ActorCode(EnumClass, ABC):
         raise ValueError(actor_code)
 
 
-class TeamCode:
-    North = 1
-    South = 2
+class TeamCode(enum.Enum):
+    North = 0x00010000
+    South = 0x00020000
 
     @classmethod
     def from_actor_code(cls, actor_code: int):
@@ -147,7 +148,7 @@ def get_castle_routes() -> Dict[int, Dict[int, List[Tuple[int, int]]]]:
     return castle_routes
 
 
-class Board:
+class __Deprecated__Board:
     FourDirectionDelta = [
         (0, +1),
         (0, -1),
@@ -167,6 +168,7 @@ class Board:
     }
 
     def __init__(self, board: 'Board' = None):
+        raise DeprecationWarning()
         initial_of_actor_code = {
             'XX': ActorCode.Null,
             'NC': ActorCode.NorthCart,

@@ -2,20 +2,15 @@ import os
 
 import pygame
 
-import game_data
 from game_data import screen_width
 from game_director import Director
-import board_in_c
 
-print(board_in_c.get_str())
-
-print(game_data.Board.CastleRoutes)
-exit()
 os.environ['SDL_VIDEO_WINDOW_POS'] = '950,100'
 pygame.init()
 surf = pygame.display.set_mode((screen_width, screen_width))
 director = Director(surf)
 main_loop = True
+
 
 while main_loop:
     for e in pygame.event.get():

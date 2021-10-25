@@ -2,8 +2,10 @@ import math
 import random
 from typing import List, NoReturn
 
+from board_in_c import Board
+
 from decision_maker import DecisionMaker, Decision
-from game_data import Board, TeamCode, ActorCode, MoveCode, Pos
+from game_data import TeamCode, ActorCode, MoveCode, Pos
 
 
 class ScoringChicken:

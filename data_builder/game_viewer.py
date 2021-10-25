@@ -5,9 +5,10 @@ import random
 from typing import List, Optional, Tuple, Final
 
 import pygame.surface
+from board_in_c import Board
 from pygame.surface import Surface
 
-from game_data import block_width, screen_width, Board, MoveCode, ActorCode, screen_width
+from game_data import block_width, screen_width, MoveCode, ActorCode, screen_width, screen_resolution
 
 actor_width = int(block_width * 1.5)
 
@@ -127,8 +128,8 @@ class Viewer:
                 pygame.draw.line(
                     self.surf,
                     color=border_color,
-                    start_pos=(block_width * x1 + ex, block_width * y1 + ey),
-                    end_pos=(block_width * x2 + ex, block_width * y2 + ey),
+                    start_pos=(block_width * x1 + ex, block_width * y1 * screen_resolution + ey),
+                    end_pos=(block_width * x2 + ex, block_width * y2 * screen_resolution + ey),
                     width=5
                 )
             except Exception as e:
@@ -140,8 +141,8 @@ class Viewer:
             pygame.draw.line(
                 self.surf,
                 color=border_color,
-                start_pos=(block_width * x + ex, block_width * 1 + ey),
-                end_pos=(block_width * x + ex, block_width * 10 + ey),
+                start_pos=(block_width * x + ex, block_width * 1 * screen_resolution + ey),
+                end_pos=(block_width * x + ex, block_width * 10 * screen_resolution + ey),
                 width=3
             )
         for y in range(10):
@@ -149,8 +150,8 @@ class Viewer:
             pygame.draw.line(
                 self.surf,
                 color=border_color,
-                start_pos=(block_width * 1 + ex, block_width * y + ey),
-                end_pos=(block_width * 9 + ex, block_width * y + ey),
+                start_pos=(block_width * 1 + ex, block_width * y * screen_resolution + ey),
+                end_pos=(block_width * 9 + ex, block_width * y * screen_resolution + ey),
                 width=3
             )
 
@@ -178,7 +179,7 @@ class Viewer:
                 self.sprites.from_actor_code(actor_code),
                 dest=(
                     (x + 0.5) * block_width - (actor_width - block_width) / 2 + ex,
-                    (y + 0.5) * block_width - (actor_width - block_width) / 2 + ey,
+                    (y / screen_resolution + 0.5) * block_width - (actor_width - block_width) / 2 + ey,
                     block_width,
                     block_width
                 )
