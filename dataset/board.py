@@ -1,4 +1,4 @@
-from typing import Optional, List, Tuple
+from typing import Optional, List, Tuple, Iterable
 
 from dataset.actor import Actor
 
@@ -45,3 +45,11 @@ class Board:
     def move_actor(self, src: Tuple[int, int], dst: Tuple[int, int]):
         self.data[dst[0]][dst[1]] = self.data[src[0]][src[1]]
         self.data[src[0]][src[1]] = None
+
+    def foreach_actors(self) -> Iterable[Tuple[Actor, int, int]]:
+        for x in range(9):
+            for y in range(10):
+                actor = self.data[x][y]
+                if actor is None:
+                    continue
+                yield actor, x, y

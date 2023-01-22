@@ -1,8 +1,10 @@
 import math
+from threading import Thread
 from typing import Tuple, Optional, List
 
 import pygame.event
 
+from decision_maker.minimax import Minimax
 from python_client.client_storage import ClientStorage
 from python_client.graphics_manager import GraphicsManager
 
@@ -14,13 +16,30 @@ class InputManager:
         self.last_clicked_pos: Optional[Tuple[int, int]] = None
         self.move_cases_of_last_clicked_actor: List[Tuple[int, int]] = list()
 
+    def action_move(self, grid_pos: Tuple[int, int]):
+        board = self.client_storage.board
+        board.move_actor(self.last_clicked_pos, grid_pos)
+        trd = Thread(daemon=True, target=self.ai_move, args=())
+        trd.start()
+
+    def ai_move(self):
+        # time.sleep(0.2)
+        board = self.client_storage.board
+        print('hi')
+        minimax_level = 2
+        result = Minimax.get_best_move(board, minimax_level)
+        board.move_actor(result[0:2], result[2:4])
+        grp_mgr: GraphicsManager = self.client_storage.get_component(GraphicsManager)
+        grp_mgr.arrow = result
+
     def click_grid(self, grid_pos: Tuple[int, int]):
         grp_mgr: GraphicsManager = self.client_storage.get_component(GraphicsManager)
 
         board = self.client_storage.board
         actor = board.get_actor(grid_pos)
         if grid_pos in self.move_cases_of_last_clicked_actor:
-            board.move_actor(self.last_clicked_pos, grid_pos)
+            self.action_move(grid_pos)
+            grp_mgr.arrow = (self.last_clicked_pos[0], self.last_clicked_pos[1], grid_pos[0], grid_pos[1])
             grp_mgr.highlighted_blocks.clear()
             self.move_cases_of_last_clicked_actor.clear()
             self.last_clicked_pos = None

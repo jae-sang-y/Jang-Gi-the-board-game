@@ -112,7 +112,7 @@ class Actor:
             for dx_2, dy_2 in tilted_direction:
                 final = (road_1[0] + dx_1 + dx_2, road_1[1] + dy_1 + dy_2)
                 if board.is_pos_in_board(final) is False:
-                    break
+                    continue
                 other = board.get_actor(final)
                 if other is None or other.is_red != self.is_red:
                     result.append(final)
@@ -147,7 +147,7 @@ class Actor:
 
                 final = (road_2[0] + dx_1 + dx_2, road_2[1] + dy_1 + dy_2)
                 if board.is_pos_in_board(final) is False:
-                    break
+                    continue
                 other = board.get_actor(final)
                 if other is None or other.is_red != self.is_red:
                     result.append(final)
