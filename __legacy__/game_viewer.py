@@ -5,7 +5,7 @@ import random
 from typing import List, Optional, Tuple, Final
 
 import pygame.surface
-from board_in_c import Board
+# from board_in_c import Board
 from pygame.surface import Surface
 
 from game_data import block_width, screen_width, MoveCode, ActorCode, screen_width, screen_resolution

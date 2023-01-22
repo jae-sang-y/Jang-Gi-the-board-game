@@ -1,5 +1,5 @@
 import pygame
-from board_in_c import Board
+# from board_in_c import Board
 from pygame import Surface
 from pygame.event import Event
 
