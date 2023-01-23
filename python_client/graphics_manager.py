@@ -156,7 +156,7 @@ class GraphicsManager:
                 actor = board.data[x][y]
                 if actor is None:
                     continue
-                actor_code = actor.get_actor_code()
+                actor_code = actor.to_actor_code()
                 self.surf.blit(
                     self.actor_sprites[actor_code],
                     dest=(

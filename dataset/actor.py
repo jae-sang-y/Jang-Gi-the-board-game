@@ -10,10 +10,20 @@ class Actor:
     actor_type: ActorType
     is_red: bool
 
-    def get_actor_code(self) -> int:
+    def to_actor_code(self) -> int:
         return self.actor_type.value + (
             0 if self.is_red is True else 7
         )
+
+    @classmethod
+    def from_actor_code(cls, actor_code: int) -> 'Actor':
+        if actor_code >= 7:
+            actor_code -= 7
+            is_red = False
+        else:
+            is_red = True
+        actor_type = ActorType(value=actor_code)
+        return Actor(actor_type=actor_type, is_red=is_red)
 
     @classmethod
     def get_four_directions(cls):
@@ -77,7 +87,7 @@ class Actor:
         ):
             if is_crossing and not (board.is_on_ears_of_palaces(pos) or board.is_on_center_of_palaces(pos)):
                 continue
-            for c in range(1, 9):
+            for c in range(1, 10):
                 new_pos = (pos[0] + dx * c, pos[1] + dy * c)
                 if board.is_pos_in_board(new_pos) is False:
                     break

@@ -4,6 +4,7 @@ from typing import Tuple, Optional, List
 
 import pygame.event
 
+from decision_maker.board_util import BoardUtil
 from decision_maker.minimax import Minimax
 from python_client.client_storage import ClientStorage
 from python_client.graphics_manager import GraphicsManager
@@ -15,9 +16,13 @@ class InputManager:
         self.client_storage = client_storage
         self.last_clicked_pos: Optional[Tuple[int, int]] = None
         self.move_cases_of_last_clicked_actor: List[Tuple[int, int]] = list()
+        self.board_stack = list()
 
     def action_move(self, grid_pos: Tuple[int, int]):
         board = self.client_storage.board
+        self.board_stack.append(
+            BoardUtil.duplicate_board(board)
+        )
         board.move_actor(self.last_clicked_pos, grid_pos)
         trd = Thread(daemon=True, target=self.ai_move, args=())
         trd.start()
@@ -25,12 +30,13 @@ class InputManager:
     def ai_move(self):
         # time.sleep(0.2)
         board = self.client_storage.board
-        print('hi')
+        print('ai is starting to think for a decision')
         minimax_level = 2
         result = Minimax.get_best_move(board, minimax_level)
         board.move_actor(result[0:2], result[2:4])
         grp_mgr: GraphicsManager = self.client_storage.get_component(GraphicsManager)
         grp_mgr.arrow = result
+        print('ai made a decision')
 
     def click_grid(self, grid_pos: Tuple[int, int]):
         grp_mgr: GraphicsManager = self.client_storage.get_component(GraphicsManager)
@@ -77,3 +83,7 @@ class InputManager:
                     screen_to_grid(screen_pos[1]),
                 )
             )
+        elif e.type == pygame.KEYDOWN:
+            if e.key == pygame.K_z and (e.mod & pygame.KMOD_CTRL) != 0 and self.board_stack:
+                old_board = self.board_stack.pop(-1)
+                self.client_storage.board = old_board
