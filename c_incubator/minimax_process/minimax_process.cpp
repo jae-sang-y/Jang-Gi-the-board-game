@@ -58,7 +58,7 @@ void log_board(const Board& board, const char* title)
 
 //#define DEBUG
 
-int negative_max(const Board& board, const int turn_cnt, const bool is_red)
+int minimax(const Board& board, const int turn_cnt, const bool is_red)
 {
     if (turn_cnt == g_minimax_level)
     {
@@ -116,7 +116,7 @@ int negative_max(const Board& board, const int turn_cnt, const bool is_red)
 //        int v = evaluator_basic(board);
 //        std::cout << "vv : " << v << std::endl;
 #endif
-        int new_board_score = negative_max(new_board, turn_cnt + 1, !is_red);
+        int new_board_score = minimax(new_board, turn_cnt + 1, !is_red);
         if (turn_cnt == 2)
         {
             g_report_stream << " / " << move.src.x << ", " << move.src.y
@@ -210,7 +210,7 @@ void parallel_execute(const int minimax_level, const int k)
 
     log_board(g_board, "1st moved(green)");
 
-    int move_value = negative_max(g_board, 2, true);
+    int move_value = minimax(g_board, 2, true);
     std::cout << "move_value : " << move_value << std::endl;
     g_report_stream << "move_value : " << move_value << std::endl;
     {
