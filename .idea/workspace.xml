@@ -5,30 +5,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8fe9a310-4cd6-430a-8dd6-9f57f75fcc26" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/c_incubator/bin/board_util.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/dataset/actor.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/dataset/actor.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/dataset/actor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/dataset/actor_type.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/dataset/board.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/dataset/board.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/dataset/board.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/dataset/common.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/decision_maker/board_util.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/decision_maker/board_util.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/decision_maker/board_util.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/evaluator/evaluator.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/evaluator/evaluator.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/evaluator/evaluator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/minimax_process/minimax_process.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/c_incubator/msvc_compiler.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/board.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/board_util.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/evaluator.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/main.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/minimax_process.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/setup.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/c_incubator/jangi_extension/include/dataset/actor.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/c_incubator/jangi_extension/jangi_extension.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/c_incubator/jangi_extension/setup.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/actor.py.deprecated" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/python_client/sound_manager.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/snd/musics/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataset/actor.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/actor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataset/actor_type.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/actor_type.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_incubator/bin/actor.dll" beforeDir="false" afterPath="$PROJECT_DIR$/c_incubator/bin/actor.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_incubator/bin/board.dll" beforeDir="false" afterPath="$PROJECT_DIR$/c_incubator/bin/board.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_incubator/bin/board_util.dll" beforeDir="false" afterPath="$PROJECT_DIR$/c_incubator/bin/board_util.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_incubator/bin/evaluator.dll" beforeDir="false" afterPath="$PROJECT_DIR$/c_incubator/bin/evaluator.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_incubator/bin/minimax_process.exe" beforeDir="false" afterPath="$PROJECT_DIR$/c_incubator/bin/minimax_process.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_incubator/dataset/actor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c_incubator/dataset/actor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_incubator/dataset/actor.h" beforeDir="false" afterPath="$PROJECT_DIR$/c_incubator/dataset/actor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_incubator/dataset/board.py" beforeDir="false" afterPath="$PROJECT_DIR$/c_incubator/dataset/board.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_incubator/evaluator/evaluator.py" beforeDir="false" afterPath="$PROJECT_DIR$/c_incubator/evaluator/evaluator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_incubator/lib/actor.lib" beforeDir="false" afterPath="$PROJECT_DIR$/c_incubator/lib/actor.lib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_incubator/minimax_process/minimax_process.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c_incubator/minimax_process/minimax_process.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_incubator/msvc_compiler.py" beforeDir="false" afterPath="$PROJECT_DIR$/c_incubator/msvc_compiler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/actor.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/board.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/board.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/board_factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/board_factory.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/decision_maker/board_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/decision_maker/board_util.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/decision_maker/minimax.py" beforeDir="false" afterPath="$PROJECT_DIR$/decision_maker/minimax.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python_client/graphics_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/python_client/graphics_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluator/evaluator.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluator/evaluator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python_client/input_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/python_client/input_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python_client/python_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/python_client/python_client.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/working_temp/minimax/.gitignore" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -66,135 +76,34 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/c_incubator/dataset" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="run.code.analysis.last.selected.profile" value="aDefault" />
+    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\apple\OneDrive\문서\GitHub\Jang-Gi-the-board-game" />
+      <recent name="C:\Users\apple\OneDrive\문서\GitHub\Jang-Gi-the-board-game\c_incubator\py_dataset" />
+      <recent name="C:\Users\apple\OneDrive\문서\GitHub\Jang-Gi-the-board-game\resources\snd\musics" />
       <recent name="C:\Users\apple\OneDrive\문서\GitHub\Jang-Gi-the-board-game\c_incubator\dataset" />
       <recent name="C:\Users\apple\OneDrive\문서\GitHub\Jang-Gi-the-board-game\c_incubator\evaluator" />
-      <recent name="C:\Users\apple\OneDrive\문서\GitHub\Jang-Gi-the-board-game\c_incubator" />
-      <recent name="C:\Users\apple\OneDrive\문서\GitHub\Jang-Gi-the-board-game\c_incubator\decision_maker" />
-      <recent name="C:\Users\apple\OneDrive\문서\GitHub\Jang-Gi-the-board-game" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\apple\OneDrive\문서\GitHub\Jang-Gi-the-board-game\c_incubator\jangi_extension\include" />
       <recent name="C:\Users\apple\OneDrive\문서\GitHub\Jang-Gi-the-board-game\c_incubator\minimax_process" />
       <recent name="C:\Users\apple\OneDrive\문서\GitHub\Jang-Gi-the-board-game\c_incubator\" />
       <recent name="C:\Users\apple\OneDrive\문서\GitHub\Jang-Gi-the-board-game\c_incubator\minimax_process.c" />
       <recent name="C:\Users\apple\OneDrive\문서\GitHub\Jang-Gi-the-board-game\resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
-    <configuration name="actor" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Jang-Gi-the-board-game" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/c_incubator/dataset" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/c_incubator/dataset/actor.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="board_util" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Jang-Gi-the-board-game" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/c_incubator/decision_maker" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/c_incubator/decision_maker/board_util.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="evaluator" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Jang-Gi-the-board-game" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/c_incubator/evaluator" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/c_incubator/evaluator/evaluator.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Jang-Gi-the-board-game" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="minimax_process" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Jang-Gi-the-board-game" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/c_incubator/minimax_process" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/c_incubator/minimax_process/minimax_process.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.setup">
     <list>
+      <item itemvalue="Python.setup" />
       <item itemvalue="Python.minimax_process" />
+      <item itemvalue="Python.board" />
       <item itemvalue="Python.evaluator" />
       <item itemvalue="Python.board_util" />
-      <item itemvalue="Python.actor" />
       <item itemvalue="Python.main" />
     </list>
     <recent_temporary>
@@ -202,8 +111,8 @@
         <item itemvalue="Python.main" />
         <item itemvalue="Python.minimax_process" />
         <item itemvalue="Python.evaluator" />
-        <item itemvalue="Python.actor" />
         <item itemvalue="Python.board_util" />
+        <item itemvalue="Python.board" />
       </list>
     </recent_temporary>
   </component>

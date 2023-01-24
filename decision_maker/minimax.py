@@ -30,7 +30,7 @@ class Minimax:
         return result
 
     @classmethod
-    def get_best_move(cls, board: Board, minimax_level: int) -> Tuple[int, int, int, int]:
+    def get_best_move(cls, board: Board, minimax_level: int) -> Tuple[Tuple[int, int, int, int], int]:
         all_moves = list()
         prepared_processes = list()
         running_processes = list()
@@ -96,17 +96,23 @@ class Minimax:
 
             time.sleep(0.01)
 
+        current_value = Evaluator.basic(board)
         result: Optional[Tuple[int, int, int, int]] = None
         result_value = None
         for k, move in enumerate(all_moves):
             move_value = int(
                 (cls.working_temp_path / '{}.output.dat'.format(k)).read_text(encoding='utf-8')
+            ) - current_value
+            print(
+                'move #{}'.format(k),
+                BoardUtil.pos_to_name(*move[0:2]), '->',
+                BoardUtil.pos_to_name(*move[2:4]), 'is',
+                move_value
             )
-            print('move #{}'.format(k), move[0:2], '->', move[2:4], 'is', move_value)
             if result_value is None or move_value < result_value:
                 result_value = move_value
                 result = move
-        return result
+        return result, result_value + current_value
 
     @classmethod
     def parallel_execute(cls, minimax_level: str, k: str):

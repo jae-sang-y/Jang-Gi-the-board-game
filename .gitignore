@@ -1,1 +1,5 @@
 **/*.pyc
+c_incubator/jangi_extension/build
+c_incubator/jangi_extension/dist
+c_incubator/jangi_extension/jangi_extension.egg-info
+working_temp/minimax/*.dat

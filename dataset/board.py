@@ -1,6 +1,6 @@
 from typing import Optional, List, Tuple, Iterable
 
-from dataset.actor import Actor
+from jangi_extension import Actor
 
 
 class Board:

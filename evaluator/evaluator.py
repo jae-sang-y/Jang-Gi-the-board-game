@@ -4,8 +4,8 @@ from dataset.board import Board
 
 class Evaluator:
     @classmethod
-    def basic(cls, board: Board) -> float:
-        result: float = 0.0
+    def basic(cls, board: Board) -> int:
+        result: int = 0
         # If the board seems like the red is win. it returns positive
         # If not, it returns negative.
         # Bigger number means bolder signal.
@@ -13,9 +13,9 @@ class Evaluator:
             for actor in row:
                 if actor is None:
                     continue
-                value: float = 0.0
+                value: int = 0
                 if actor.actor_type == ActorType.KING:
-                    value = 987654321
+                    value = 10000
                 elif actor.actor_type == ActorType.KART:
                     value = 13
                 elif actor.actor_type == ActorType.CANNON:

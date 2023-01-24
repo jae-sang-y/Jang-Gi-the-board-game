@@ -25,6 +25,7 @@ class MSVCCompiler:
             '/MD', '/EHsc', '/utf-8'
         ]
         self.additional_import_lib_list: List[str] = list()
+        self.additional_include_path_list: List[str] = list()
 
     def compile(self):
         print('cwd:', os.getcwd())
@@ -42,7 +43,7 @@ class MSVCCompiler:
         ]
 
         compile_args = ['cl.exe']
-        for include_path in include_path_list:
+        for include_path in itertools.chain(include_path_list, self.additional_include_path_list):
             compile_args.append('-I')
             compile_args.append(f'"{include_path}"')
         compile_args.append(self.target_file)

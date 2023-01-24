@@ -1,6 +1,6 @@
 from typing import List, Tuple, Iterable
 
-from dataset.actor import Actor
+from jangi_extension import Actor
 from dataset.board import Board
 
 
@@ -18,6 +18,7 @@ class BoardUtil:
     def duplicate_board(cls, old_board: Board) -> Board:
         new_board = Board()
         for actor, x, y in old_board.foreach_actors():
+            print(actor.actor_type, actor.is_red)
             new_board.data[x][y] = \
                 Actor(
                     actor_type=actor.actor_type,
@@ -61,3 +62,28 @@ class BoardUtil:
                 if actor_code not in (0, 7):
                     board.data[x][y] = Actor.from_actor_code(actor_code)
         return board
+
+    @classmethod
+    def pos_to_name(cls, x: int, y: int) -> str:
+        if x == 0:
+            x_name = '좌변'
+        elif x == 8:
+            x_name = '우변'
+        elif x == 4:
+            x_name = '중앙'
+        elif x == 3:
+            x_name = '좌익'
+        elif x == 5:
+            x_name = '우익'
+        elif x == 2:
+            x_name = '좌문'
+        elif x == 6:
+            x_name = '우문'
+        elif x == 1:
+            x_name = '좌진'
+        elif x == 7:
+            x_name = '우진'
+        else:
+            x_name = f'{x + 1}선'
+        y_name = f'{y + 1}선'
+        return f'{x_name} {y_name}'

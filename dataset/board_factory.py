@@ -1,4 +1,4 @@
-from dataset.actor import Actor
+from jangi_extension import Actor
 from dataset.actor_type import ActorType
 from dataset.board import Board
 

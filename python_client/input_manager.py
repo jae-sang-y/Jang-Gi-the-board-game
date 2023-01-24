@@ -8,6 +8,7 @@ from decision_maker.board_util import BoardUtil
 from decision_maker.minimax import Minimax
 from python_client.client_storage import ClientStorage
 from python_client.graphics_manager import GraphicsManager
+from python_client.sound_manager import SoundManager
 
 
 class InputManager:
@@ -32,11 +33,22 @@ class InputManager:
         board = self.client_storage.board
         print('ai is starting to think for a decision')
         minimax_level = 2
-        result = Minimax.get_best_move(board, minimax_level)
-        board.move_actor(result[0:2], result[2:4])
+        best_move, evaluated_value = Minimax.get_best_move(board, minimax_level)
+
+        threshold = 25
+
+        snd_mgr: SoundManager = self.client_storage.get_component(SoundManager)
+        if evaluated_value >= +threshold and snd_mgr.current_music_name != 'battle_lean_to_win':
+            snd_mgr.music_queue.append('battle_lean_to_win')
+        elif evaluated_value <= -threshold and snd_mgr.current_music_name != 'battle_lean_to_lose':
+            snd_mgr.music_queue.append('battle_lean_to_lose')
+
+        board.move_actor(best_move[0:2], best_move[2:4])
         grp_mgr: GraphicsManager = self.client_storage.get_component(GraphicsManager)
-        grp_mgr.arrow = result
-        print('ai made a decision')
+        grp_mgr.arrow = best_move
+        print(
+            f'ai made a decision[{BoardUtil.pos_to_name(*best_move[0:2])} -> {BoardUtil.pos_to_name(*best_move[2:4])}] : {evaluated_value}'
+        )
 
     def click_grid(self, grid_pos: Tuple[int, int]):
         grp_mgr: GraphicsManager = self.client_storage.get_component(GraphicsManager)

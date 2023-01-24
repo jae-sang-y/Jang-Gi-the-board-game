@@ -11,6 +11,14 @@ static std::vector<Pos> crossing_directions = {
     Pos{+1, -1}, Pos{-1, +1},
 };
 
+int actor_get_actor_type(const int& actor_code) {
+    return (actor_code-1) % 7 + 1;
+};
+
+bool actor_is_red(const int& actor_code) {
+    return (actor_code < 8) ? true : false;
+};
+
 std::vector<Pos> actor_move_cases_as_king_or_duke(const int& actor_code, const Board& board, const Pos& pos)
 {
     std::vector<Pos> result{};
@@ -69,10 +77,17 @@ std::vector<Pos> actor_move_cases_as_kart(const int& actor_code, const Board& bo
             if (is_crossing && (!board_is_on_palace(new_pos))) break;
 
             const auto& other = board_get_actor(board, new_pos);
-            if (actor_get_actor_type(other) == 0 ||
-                actor_is_red(actor_code) != actor_is_red(other)
-            ) {
+            if (actor_get_actor_type(other) == 0)
+            {
                 result.push_back(new_pos);
+            }
+            else
+            {
+                if (actor_is_red(actor_code) != actor_is_red(other))
+                {
+                    result.push_back(new_pos);
+                }
+                break;
             }
         }
     }
